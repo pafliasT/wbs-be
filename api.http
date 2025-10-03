@@ -1,0 +1,83 @@
+# Toggle one of these:
+@baseUrl = http://localhost:3000
+# @baseUrl = https://<your-render-service>.onrender.com
+
+@contentType = application/json
+
+############################
+# Health
+############################
+### Health
+GET {{baseUrl}}/health
+
+############################
+# PROJECTS CRUD
+############################
+
+### List projects
+GET {{baseUrl}}/projects
+
+### Create project
+# @name createProject
+POST {{baseUrl}}/projects
+Content-Type: {{contentType}}
+
+{
+  "code": "WBS-{{$randomInt 1000 9999}}",
+  "name": "Demo Project {{$randomInt 1 999}}"
+}
+
+###  <-- end previous request; now define variable from its response
+@projectId = {{createProject.response.body.$.id}}
+
+### Get project by id
+GET {{baseUrl}}/projects/{{projectId}}
+
+### Update project
+PUT {{baseUrl}}/projects/{{projectId}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Renamed Project {{$randomInt 1 999}}"
+}
+
+### Delete project
+DELETE {{baseUrl}}/projects/{{projectId}}
+
+############################
+# TIMESHEETS CRUD
+############################
+
+### List timesheets
+GET {{baseUrl}}/timesheets
+
+### Create timesheet (uses {{projectId}} from above)
+# @name createTimesheet
+POST {{baseUrl}}/timesheets
+Content-Type: {{contentType}}
+
+{
+  "date": "{{$datetime iso8601}}",
+  "hours": "2.50",
+  "type": "BILLABLE",
+  "projectId": "{{projectId}}",
+  "note": "Initial setup"
+}
+
+###  <-- end previous request; now define variable from its response
+@timesheetId = {{createTimesheet.response.body.$.id}}
+
+### Get timesheet by id
+GET {{baseUrl}}/timesheets/{{timesheetId}}
+
+### Update timesheet
+PUT {{baseUrl}}/timesheets/{{timesheetId}}
+Content-Type: {{contentType}}
+
+{
+  "hours": "3.00",
+  "note": "Updated hours"
+}
+
+### Delete timesheet
+DELETE {{baseUrl}}/timesheets/{{timesheetId}}

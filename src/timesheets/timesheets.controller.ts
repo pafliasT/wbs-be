@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { ProjectsService } from './projects.service';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
+import { TimesheetsService } from './timesheets.service';
+import { CreateTimesheetDto } from './dto/create-timesheet.dto';
+import { UpdateTimesheetDto } from './dto/update-timesheet.dto';
 
-@Controller('projects')
-export class ProjectsController {
-  constructor(private readonly service: ProjectsService) { }
+@Controller('timesheets')
+export class TimesheetsController {
+  constructor(private readonly service: TimesheetsService) { }
 
   @Get()
   list() {
@@ -18,12 +18,12 @@ export class ProjectsController {
   }
 
   @Post()
-  create(@Body() dto: CreateProjectDto) {
+  create(@Body() dto: CreateTimesheetDto) {
     return this.service.create(dto);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateProjectDto) {
+  update(@Param('id') id: string, @Body() dto: UpdateTimesheetDto) {
     return this.service.update(id, dto);
   }
 
